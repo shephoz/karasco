@@ -18,6 +18,14 @@ fun calculate(score: Int): Set<Hand> {
             hands.add(Hand.High)
         }
     }
+
+    val occurrence = mutableMapOf<Int, Int>()
+    for (digit in digits) {
+        val current = occurrence[digit] ?: 0
+        occurrence[digit] = current + 1
+    }
+    println(occurrence)
+
     return hands
 }
 
