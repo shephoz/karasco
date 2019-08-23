@@ -4,6 +4,20 @@ fun main() {
 
 fun calculate(score: Int): List<Hand> {
     val hands = mutableListOf<Hand>()
+    val digits: List<Int> = score.toString().toList().map { it.toString().toInt() }
+    val sum: Int = digits.sum()
+    when (sum) {
+        in 0..17 -> {
+            hands.add(Hand.Low)
+        }
+        21 -> {
+            hands.add(Hand.BlackJack)
+        }
+        in 37..45 -> {
+            hands.add(Hand.High)
+        }
+
+    }
     return hands
 }
 
