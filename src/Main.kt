@@ -2,9 +2,10 @@ fun main() {
     println(calculate(12345))
 }
 
-fun calculate(score: Int): List<Hand> {
-    val hands = mutableListOf<Hand>()
+fun calculate(score: Int): Set<Hand> {
+    val hands = mutableSetOf<Hand>()
     val digits: List<Int> = score.toString().toList().map { it.toString().toInt() }
+
     val sum: Int = digits.sum()
     when (sum) {
         in 0..17 -> {
@@ -16,7 +17,6 @@ fun calculate(score: Int): List<Hand> {
         in 37..45 -> {
             hands.add(Hand.High)
         }
-
     }
     return hands
 }
