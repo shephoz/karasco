@@ -19,6 +19,25 @@ fun calculate(score: Int): Set<Hand> {
         }
     }
 
+    val occurrences = digits.groupingBy { it }.eachCount().toList().sortedBy { -it.second }
+    println(occurrences)
+    when (occurrences[0].second) {
+        4 -> {
+            hands.add(NormalHand.FourCards)
+        }
+        3 -> {
+            when (occurrences[1].second) {
+                2 -> hands.add(NormalHand.FullHouse)
+                1 -> hands.add(NormalHand.ThreeCards)
+            }
+        }
+        2 -> {
+            when (occurrences[1].second) {
+                2 -> hands.add(NormalHand.TwoPairs)
+            }
+        }
+    }
+
     val sequentialOccurrences = mutableListOf<Pair<Int, Int>>() // Pair(digit, occurrence)
     for (digit in digits) {
         val lastOccurrence = sequentialOccurrences.lastOrNull()
