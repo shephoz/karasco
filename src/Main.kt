@@ -10,7 +10,7 @@ fun calculate(score: Int): Set<Hand> {
     val hands = mutableSetOf<Hand>()
     hands.sumCheck(digits)
     hands.occurrenceCheck(digits)
-    hands.sequentialCheck(digits)
+    hands.continuousCheck(digits)
 
     return hands
 }
@@ -63,21 +63,21 @@ fun MutableSet<Hand>.occurrenceCheck(digits: List<Int>) {
     }
 }
 
-fun MutableSet<Hand>.sequentialCheck(digits: List<Int>) {
+fun MutableSet<Hand>.continuousCheck(digits: List<Int>) {
     val hands = this
-    val sequentialOccurrences = mutableListOf<Occurrence>()
+    val continuousOccurrences = mutableListOf<Occurrence>()
     for (digit in digits) {
-        val lastOccurrence = sequentialOccurrences.lastOrNull()
+        val lastOccurrence = continuousOccurrences.lastOrNull()
         if (lastOccurrence != null && digit == lastOccurrence.digit) {
             lastOccurrence.increment()
         } else {
-            sequentialOccurrences.add(Occurrence(digit, 1))
+            continuousOccurrences.add(Occurrence(digit, 1))
         }
     }
-    sequentialOccurrences.sortByDescending { it.times }
-    println(sequentialOccurrences)
+    continuousOccurrences.sortByDescending { it.times }
+    println(continuousOccurrences)
 
-    val mostOccurred = sequentialOccurrences[0]
+    val mostOccurred = continuousOccurrences[0]
     when (mostOccurred.times) {
         4 -> {
             if (hands.contains(NormalHand.FourCards)) {
@@ -85,7 +85,7 @@ fun MutableSet<Hand>.sequentialCheck(digits: List<Int>) {
             }
         }
         3 -> {
-            when (sequentialOccurrences[1].times) {
+            when (continuousOccurrences[1].times) {
                 2 -> {
                     if (hands.contains(NormalHand.FullHouse)) {
                         hands.add(NormalHand.Flash)
@@ -103,7 +103,7 @@ fun MutableSet<Hand>.sequentialCheck(digits: List<Int>) {
             }
         }
         2 -> {
-            when (sequentialOccurrences[1].times) {
+            when (continuousOccurrences[1].times) {
                 2 -> {
                     if (hands.contains(NormalHand.TwoPairs)) {
                         hands.add(NormalHand.Flash)
