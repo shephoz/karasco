@@ -9,8 +9,9 @@ fun main() {
     if (bottles > 0) println("$bottles bottles!")
 }
 
-fun calculate(score: Int): Set<Hand> {
-    val digits: List<Int> = score.toString().toList().map { it.toString().toInt() }
+fun calculate(score: Double): Set<Hand> {
+    val scoreInt = (score * 1000).toInt()
+    val digits: List<Int> = scoreInt.toString().toList().map { it.toString().toInt() }
 
     val hands = mutableSetOf<Hand>()
     hands.sumCheck(digits)
