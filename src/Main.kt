@@ -19,7 +19,8 @@ fun calculate(score: Int): Set<Hand> {
         }
     }
 
-    val occurrences = digits.groupingBy { it }.eachCount().map { Occurrence(it.key, it.value) }.sortedBy { -it.times }
+    val occurrences =
+        digits.groupingBy { it }.eachCount().map { Occurrence(it.key, it.value) }.sortedByDescending { it.times }
     println(occurrences)
     when (occurrences[0].times) {
         4 -> {
@@ -48,7 +49,7 @@ fun calculate(score: Int): Set<Hand> {
         }
     }
 
-    sequentialOccurrences.sortBy { -it.times * 10 + it.digit } //まず出現回数の多い順、その中でdigitの昇順
+    sequentialOccurrences.sortByDescending { it.times }
     println(sequentialOccurrences)
     val mostOccurred = sequentialOccurrences[0]
     when (mostOccurred.times) {
