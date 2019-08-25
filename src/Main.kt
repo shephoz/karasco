@@ -19,12 +19,63 @@ fun calculate(score: Int): Set<Hand> {
         }
     }
 
-    val occurrence = mutableMapOf<Int, Int>()
+    val sequentialOccurrences = mutableListOf<Pair<Int, Int>>() // Pair(digit, occurrence)
     for (digit in digits) {
-        val current = occurrence[digit] ?: 0
-        occurrence[digit] = current + 1
+        val lastOccurrence = sequentialOccurrences.lastOrNull()
+        if (lastOccurrence != null && digit == lastOccurrence.first) {
+            sequentialOccurrences.set(
+                sequentialOccurrences.lastIndex,
+                Pair(lastOccurrence.first, lastOccurrence.second + 1)
+            )
+        } else {
+            sequentialOccurrences.add(Pair(digit, 1))
+        }
     }
-    println(occurrence)
+
+    sequentialOccurrences.sortBy { -it.second * 10 + it.first } //まず出現回数の多い順、その中でdigitの昇順
+    println(sequentialOccurrences)
+    val mostOccurred = sequentialOccurrences[0]
+    when (mostOccurred.second) {
+        5 -> {
+            if (mostOccurred.first == 7) {
+                hands.add(SpecialHand.AllSeven)
+            } else {
+                hands.add(SpecialHand.FiveCards)
+            }
+        }
+        4 -> {
+            if (hands.contains(NormalHand.FourCards)) {
+                hands.add(NormalHand.Flash)
+            }
+        }
+        3 -> {
+            when (sequentialOccurrences[1].second) {
+                2 -> {
+                    if (hands.contains(NormalHand.FullHouse)) {
+                        hands.add(NormalHand.Flash)
+                    }
+                }
+                1 -> {
+                    if (hands.contains(NormalHand.ThreeCards)) {
+                        hands.add(NormalHand.Flash)
+                    }
+
+                }
+            }
+            if (mostOccurred.first == 7) {
+                hands.add(NormalHand.ThreeSevens)
+            }
+        }
+        2 -> {
+            when (sequentialOccurrences[1].second) {
+                2 -> {
+                    if (hands.contains(NormalHand.TwoPairs)) {
+                        hands.add(NormalHand.Flash)
+                    }
+                }
+            }
+        }
+    }
 
     return hands
 }
