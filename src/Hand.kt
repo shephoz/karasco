@@ -1,3 +1,5 @@
+package jp.wozniak.karasco
+
 interface Hand
 
 enum class NormalHand(point: Int) : Hand {

@@ -1,5 +1,7 @@
+package jp.wozniak.karasco
+
 fun main() {
-    println(calculate(12345))
+    println(calculate(77007))
 }
 
 fun calculate(score: Int): Set<Hand> {
