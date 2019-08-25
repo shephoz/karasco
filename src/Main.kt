@@ -5,10 +5,20 @@ fun main() {
 }
 
 fun calculate(score: Int): Set<Hand> {
-    val hands = mutableSetOf<Hand>()
     val digits: List<Int> = score.toString().toList().map { it.toString().toInt() }
 
+    val hands = mutableSetOf<Hand>()
+    hands.sumCheck(digits)
+    hands.occurrenceCheck(digits)
+    hands.sequentialCheck(digits)
+
+    return hands
+}
+
+fun MutableSet<Hand>.sumCheck(digits: List<Int>) {
+    val hands = this
     val sum: Int = digits.sum()
+
     when (sum) {
         in 0..17 -> {
             hands.add(NormalHand.Low)
@@ -20,11 +30,22 @@ fun calculate(score: Int): Set<Hand> {
             hands.add(NormalHand.High)
         }
     }
+}
 
+fun MutableSet<Hand>.occurrenceCheck(digits: List<Int>) {
+    val hands = this
     val occurrences =
         digits.groupingBy { it }.eachCount().map { Occurrence(it.key, it.value) }.sortedByDescending { it.times }
     println(occurrences)
+
     when (occurrences[0].times) {
+        5 -> {
+            if (occurrences[0].digit == 7) {
+                hands.add(SpecialHand.AllSeven)
+            } else {
+                hands.add(SpecialHand.FiveCards)
+            }
+        }
         4 -> {
             hands.add(NormalHand.FourCards)
         }
@@ -40,7 +61,10 @@ fun calculate(score: Int): Set<Hand> {
             }
         }
     }
+}
 
+fun MutableSet<Hand>.sequentialCheck(digits: List<Int>) {
+    val hands = this
     val sequentialOccurrences = mutableListOf<Occurrence>()
     for (digit in digits) {
         val lastOccurrence = sequentialOccurrences.lastOrNull()
@@ -50,18 +74,11 @@ fun calculate(score: Int): Set<Hand> {
             sequentialOccurrences.add(Occurrence(digit, 1))
         }
     }
-
     sequentialOccurrences.sortByDescending { it.times }
     println(sequentialOccurrences)
+
     val mostOccurred = sequentialOccurrences[0]
     when (mostOccurred.times) {
-        5 -> {
-            if (mostOccurred.digit == 7) {
-                hands.add(SpecialHand.AllSeven)
-            } else {
-                hands.add(SpecialHand.FiveCards)
-            }
-        }
         4 -> {
             if (hands.contains(NormalHand.FourCards)) {
                 hands.add(NormalHand.Flash)
@@ -95,8 +112,6 @@ fun calculate(score: Int): Set<Hand> {
             }
         }
     }
-
-    return hands
 }
 
 class Occurrence(val digit: Int, var times: Int) {
