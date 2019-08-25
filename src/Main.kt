@@ -1,7 +1,12 @@
 package jp.wozniak.karasco
 
 fun main() {
-    println(calculate(77007))
+    val hands = calculate(77.007)
+    println(hands)
+    val points = hands.filterIsInstance<NormalHand>().sumBy { it.point }
+    val bottles = hands.filterIsInstance<SpecialHand>().sumBy { it.bottles }
+    if (points > 0) println("$points points!")
+    if (bottles > 0) println("$bottles bottles!")
 }
 
 fun calculate(score: Int): Set<Hand> {
