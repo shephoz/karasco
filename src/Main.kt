@@ -82,19 +82,19 @@ fun MutableSet<Hand>.continuousCheck(digits: List<Int>) {
     when (mostOccurred.times) {
         4 -> {
             if (hands.contains(NormalHand.FourCards)) {
-                hands.add(NormalHand.Flash)
+                hands.add(NormalHand.Flush)
             }
         }
         3 -> {
             when (continuousOccurrences[1].times) {
                 2 -> {
                     if (hands.contains(NormalHand.FullHouse)) {
-                        hands.add(NormalHand.Flash)
+                        hands.add(NormalHand.Flush)
                     }
                 }
                 1 -> {
                     if (hands.contains(NormalHand.ThreeCards)) {
-                        hands.add(NormalHand.Flash)
+                        hands.add(NormalHand.Flush)
                     }
 
                 }
@@ -107,7 +107,7 @@ fun MutableSet<Hand>.continuousCheck(digits: List<Int>) {
             when (continuousOccurrences[1].times) {
                 2 -> {
                     if (hands.contains(NormalHand.TwoPairs)) {
-                        hands.add(NormalHand.Flash)
+                        hands.add(NormalHand.Flush)
                     }
                 }
             }
@@ -121,7 +121,7 @@ fun MutableSet<Hand>.straightCheck(digits: List<Int>) {
     val flushSequences =
         (0..5).map { (it..it + 4).toList() }.let { seq -> seq.map { it.reversed() }.plus(seq) }
     if (flushSequences.contains(digits)) {
-        hands.add(SpecialHand.StraightFlash)
+        hands.add(SpecialHand.StraightFlush)
         return
     }
     if (sequences.contains(digits.sorted())) {
