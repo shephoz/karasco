@@ -19,44 +19,41 @@ fun calculate(score: Int): Set<Hand> {
         }
     }
 
-    val occurrences = digits.groupingBy { it }.eachCount().toList().sortedBy { -it.second }
+    val occurrences = digits.groupingBy { it }.eachCount().map { Occurrence(it.key, it.value) }.sortedBy { -it.times }
     println(occurrences)
-    when (occurrences[0].second) {
+    when (occurrences[0].times) {
         4 -> {
             hands.add(NormalHand.FourCards)
         }
         3 -> {
-            when (occurrences[1].second) {
+            when (occurrences[1].times) {
                 2 -> hands.add(NormalHand.FullHouse)
                 1 -> hands.add(NormalHand.ThreeCards)
             }
         }
         2 -> {
-            when (occurrences[1].second) {
+            when (occurrences[1].times) {
                 2 -> hands.add(NormalHand.TwoPairs)
             }
         }
     }
 
-    val sequentialOccurrences = mutableListOf<Pair<Int, Int>>() // Pair(digit, occurrence)
+    val sequentialOccurrences = mutableListOf<Occurrence>()
     for (digit in digits) {
         val lastOccurrence = sequentialOccurrences.lastOrNull()
-        if (lastOccurrence != null && digit == lastOccurrence.first) {
-            sequentialOccurrences.set(
-                sequentialOccurrences.lastIndex,
-                Pair(lastOccurrence.first, lastOccurrence.second + 1)
-            )
+        if (lastOccurrence != null && digit == lastOccurrence.digit) {
+            lastOccurrence.increment()
         } else {
-            sequentialOccurrences.add(Pair(digit, 1))
+            sequentialOccurrences.add(Occurrence(digit, 1))
         }
     }
 
-    sequentialOccurrences.sortBy { -it.second * 10 + it.first } //まず出現回数の多い順、その中でdigitの昇順
+    sequentialOccurrences.sortBy { -it.times * 10 + it.digit } //まず出現回数の多い順、その中でdigitの昇順
     println(sequentialOccurrences)
     val mostOccurred = sequentialOccurrences[0]
-    when (mostOccurred.second) {
+    when (mostOccurred.times) {
         5 -> {
-            if (mostOccurred.first == 7) {
+            if (mostOccurred.digit == 7) {
                 hands.add(SpecialHand.AllSeven)
             } else {
                 hands.add(SpecialHand.FiveCards)
@@ -68,7 +65,7 @@ fun calculate(score: Int): Set<Hand> {
             }
         }
         3 -> {
-            when (sequentialOccurrences[1].second) {
+            when (sequentialOccurrences[1].times) {
                 2 -> {
                     if (hands.contains(NormalHand.FullHouse)) {
                         hands.add(NormalHand.Flash)
@@ -81,12 +78,12 @@ fun calculate(score: Int): Set<Hand> {
 
                 }
             }
-            if (mostOccurred.first == 7) {
+            if (mostOccurred.digit == 7) {
                 hands.add(NormalHand.ThreeSevens)
             }
         }
         2 -> {
-            when (sequentialOccurrences[1].second) {
+            when (sequentialOccurrences[1].times) {
                 2 -> {
                     if (hands.contains(NormalHand.TwoPairs)) {
                         hands.add(NormalHand.Flash)
@@ -97,6 +94,11 @@ fun calculate(score: Int): Set<Hand> {
     }
 
     return hands
+}
+
+class Occurrence(val digit: Int, var times: Int) {
+    fun increment() = this.times++
+    override fun toString(): String = "$digit($times)"
 }
 
 interface Hand
