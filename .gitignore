@@ -1,2 +1,10 @@
-.idea
+out/
+build/
+.idea/
 *.iml
+.gradle
+local.properties
+classes/
+.DS_Store
+/build
+/captures
