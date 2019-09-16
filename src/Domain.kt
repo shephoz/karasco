@@ -114,7 +114,7 @@ fun MutableSet<Hand>.continuousCheck(digits: List<Int>) {
 
 fun MutableSet<Hand>.straightCheck(digits: List<Int>) {
     val hands = this
-    val sequences = (0..9).map { (it..it + 4).toList() }.map { it.map { it % 10 } }
+    val sequences = (0..9).map { (it..it + 4).toList() }.map { it.map { it % 10 } }.map { it.sorted() }
     val flushSequences =
         (0..5).map { (it..it + 4).toList() }.let { seq -> seq.map { it.reversed() }.plus(seq) }
     if (flushSequences.contains(digits)) {
