@@ -1,0 +1,6 @@
+{
+  "name": "karasco",
+  "description": "for Bar HomeSick",
+  "image": "heroku/java",
+  "addons": []
+}

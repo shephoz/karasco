@@ -1,14 +1,5 @@
 package jp.wozniak.karasco
 
-fun main() {
-    val hands = calculate(77.007)
-    println(hands)
-    val points = hands.filterIsInstance<NormalHand>().sumBy { it.point }
-    val bottles = hands.filterIsInstance<SpecialHand>().sumBy { it.bottles }
-    if (points > 0) println("$points points!")
-    if (bottles > 0) println("$bottles bottles!")
-}
-
 fun calculate(score: Double): Set<Hand> {
     val scoreInt = (score * 1000).toInt()
     val digits: List<Int> = scoreInt.toString().toList().map { it.toString().toInt() }
@@ -123,7 +114,7 @@ fun MutableSet<Hand>.continuousCheck(digits: List<Int>) {
 
 fun MutableSet<Hand>.straightCheck(digits: List<Int>) {
     val hands = this
-    val sequences = (0..9).map { (it..it + 4).toList() }.map { it.map { it % 10 } }
+    val sequences = (0..9).map { (it..it + 4).toList() }.map { it.map { it % 10 } }.map { it.sorted() }
     val flushSequences =
         (0..5).map { (it..it + 4).toList() }.let { seq -> seq.map { it.reversed() }.plus(seq) }
     if (flushSequences.contains(digits)) {
