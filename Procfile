@@ -1,1 +1,1 @@
-web:    java -jar build/libs/karasco.jar
+web:    java -jar build/libs/karasco-all.jar
